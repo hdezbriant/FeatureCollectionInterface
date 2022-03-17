@@ -4,7 +4,7 @@ import cv2
 
 # loads image can be grayscale/color/w transparency
 img = cv2.imread('./testimg.jpg', 1)
-img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5 )
+img = cv2.resize(img, (300, 300))
 
 # shows image that was loaded in, str is window name
 cv2.imshow('hello', img)
@@ -15,8 +15,42 @@ cv2.destroyAllWindows()
 
 
 class FeatureCollection:
-    def __init__(self) -> None:
+    def __init__(feature, type, geometry) -> None:
         pass
+
+        # for i in features:
+            # init w/:
+                # geometry(?)
+                # coords
+                # properties(?)
+                # id
+                # angle?
+                # label
+                # type 
+                # parent: default null
+
+
+    # Need to define hierarchy
+    #  FeatureCollection has n "Features"
+        # "Features" have: [
+        # {
+            # "type": "Feature"(for all),
+            # "geometry": {
+            # "type": "Polygon", (for shelves) (or "LineString" for facing)
+            # "coordinates": [
+            #   [[0, 10], [10, 10], [10, 0], [0, 0], [0, 10]]
+            # ]
+        # },
+        # "properties": {
+            #  "id": "int",
+            #  "angle": 0.0,
+            #  "label": "shelf_01",
+            #  "type": "shelf", ("LineString", or "")
+            #  "parent": null
+        #   }
+        # },
+
+
 
     # get_feature(input_feature_id: str) -> Optional[Feature]
     # given ID of Feature as input, retrieve Feature Obj else return None

@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 
 # loads image can be grayscale/color/w transparency
-img = cv2.imread('./testimg.jpg', 1)
+img = cv2.imread('../testimg.jpg', 1)
 img = cv2.resize(img, (300, 300))
 
 # shows image that was loaded in, str is window name
@@ -15,8 +15,9 @@ cv2.destroyAllWindows()
 
 
 class FeatureCollection:
-    def __init__(feature, type, geometry) -> None:
-        pass
+    def __init__(self, type, features) -> None:
+        self.type = type
+        self.features = features
 
         # for i in features:
             # init w/:
@@ -35,7 +36,7 @@ class FeatureCollection:
         # "Features" have: [
         # {
             # "type": "Feature"(for all),
-            # "geometry": {
+            # Class(?) "geometry": {
             # "type": "Polygon", (for shelves) (or "LineString" for facing)
             # "coordinates": [
             #   [[0, 10], [10, 10], [10, 0], [0, 0], [0, 10]]
@@ -49,6 +50,27 @@ class FeatureCollection:
             #  "parent": null
         #   }
         # },
+
+class Feature:
+    def __init__(self, geometry, ) -> None:
+        self.geometry = geometry
+
+class geometry:
+    def __init__(self, type, coordinates) -> None:
+        self.type = type
+        self.coordinates = coordinates
+
+class properties:
+    def __init__(self, id, angle, label, type, parent) -> None:
+        self.id = id
+        self.angle = angle
+        self.label = label
+        self.type = type
+        self.parent = parent
+
+
+# How to ingest json
+# nad how to retrieve
 
 
 

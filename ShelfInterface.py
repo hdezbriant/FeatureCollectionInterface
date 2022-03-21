@@ -1,17 +1,64 @@
 import json
 import numpy as np
 import cv2
+import sys
 
-# loads image can be grayscale/color/w transparency
-img = cv2.imread('../testimg.jpg', 1)
-img = cv2.resize(img, (300, 300))
+# # loads image can be grayscale/color/w transparency
+# img = cv2.imread('../testimg.jpg', 1)
+# img = cv2.resize(img, (300, 300))
 
-# shows image that was loaded in, str is window name
-cv2.imshow('hello', img)
-# time to wait for input before moving to next step. 0 = infinite
-cv2.waitKey(0)
-# closes window on key press
-cv2.destroyAllWindows()
+# # shows image that was loaded in, str is window name
+# cv2.imshow('hello', img)
+# # time to wait for input before moving to next step. 0 = infinite
+# cv2.waitKey(0)
+# # closes window on key press
+# cv2.destroyAllWindows()
+
+def shelf_interface(geojson_file):
+
+    # Displays menu for user to select desired operation
+    menu = """Select one of the following options: 
+    1. Retrieve Feature object by ID(if it exists).
+    2. Retrieve Parent Feature object(if any).
+    3. Show all children of a Feature Object(if any).
+    4. Show all available Shelves or Facings, if they exist.
+    5. Create full label for a Facing.
+    6. Quit.\nEnter your selection: """
+
+    selection = int(input(menu))
+
+    # Handles user selection to perform chosen task.
+    try:
+        if selection == 1:
+        # Get Feature by ID
+            id_select = '''Which ID would you like to fetch?\n'''
+            feature_id = input(id_select)
+            FeatureCollection.get_feature(feature_id)
+
+        elif selection == 2:
+        # Get Parent Feature
+            print("selected 2")
+
+        elif selection == 3:
+        # Get Children of a Feature
+            print("selected 3")
+
+        elif selection == 4:
+        # Get all Shelves or Facings
+            print("Selected 4")
+
+        elif selection == 5:
+        # Create compound label for facing
+            print("Selected 5")
+
+        elif selection == 6:
+        # Exit program
+            print("Exiting...")
+            raise SystemExit()
+
+    except ValueError:
+        print(f"{selection} is not a valid choice. Please use the corresponding numbers to make a selection.")
+        shelf_interface()
 
 
 class FeatureCollection:
@@ -19,37 +66,10 @@ class FeatureCollection:
         self.type = type
         self.features = features
 
-        # for i in features:
-            # init w/:
-                # geometry(?)
-                # coords
-                # properties(?)
-                # id
-                # angle?
-                # label
-                # type 
-                # parent: default null
 
+    def get_feature(input_feature_id: str) -> None:
+        print(feature_collection)
 
-    # Need to define hierarchy
-    #  FeatureCollection has n "Features"
-        # "Features" have: [
-        # {
-            # "type": "Feature"(for all),
-            # Class(?) "geometry": {
-            # "type": "Polygon", (for shelves) (or "LineString" for facing)
-            # "coordinates": [
-            #   [[0, 10], [10, 10], [10, 0], [0, 0], [0, 10]]
-            # ]
-        # },
-        # "properties": {
-            #  "id": "int",
-            #  "angle": 0.0,
-            #  "label": "shelf_01",
-            #  "type": "shelf", ("LineString", or "")
-            #  "parent": null
-        #   }
-        # },
 
 class Feature:
     def __init__(self, geometry, ) -> None:
@@ -73,10 +93,6 @@ class properties:
 # nad how to retrieve
 
 
-
-    # get_feature(input_feature_id: str) -> Optional[Feature]
-    # given ID of Feature as input, retrieve Feature Obj else return None
-
     # get_parent_feature(input_feature: Feature) -> Optional [Feature]
     # given Feature Obj as input, retrieve parent Feature Obj, else None
 
@@ -91,3 +107,11 @@ class properties:
     # get_facing_compound_label(facing: Facing) -> str
     # Return formatted string label of parent Shelf label + given Facing label
     # as {shelf_label}_{facing_label}, such as "shelf_01_N"
+
+if __name__ == "__main__":
+    # Loads geojson file for processing later
+    with open(sys.argv[1], "r") as feature_collection:
+        feature_collection = json.load(feature_collection)
+        feature_collection = json.dumps(feature_collection, indent = 2)
+        shelf_interface(feature_collection)
+    

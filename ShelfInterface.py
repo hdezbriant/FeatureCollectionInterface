@@ -40,8 +40,11 @@ def shelf_interface(features_geojson):
             FeatureCollection.get_feature(feature_id)
 
         elif selection == 2:
-        # Get Parent Feature
-            print("selected 2")
+        # Get Parent of given Feature
+            # id_select = '''Please enter the ID for the Child Feature object:\n'''
+            # feature_id = input(id_select)
+            # FeatureCollection.get_parent_feature(feature_id)
+            pass
 
         elif selection == 3:
         # Get Children of a Feature
@@ -70,12 +73,23 @@ class FeatureCollection:
         self.type = type
         self.features = features
 
-
+    # Method to retrieve Feature by ID
     def get_feature(input_feature_id: str) -> None:
         for feature in features_geojson['features']:
             if feature['properties']['id'] == input_feature_id:
                 feature = json.dumps(feature, indent = 2)
                 print(feature)
+                break
+            elif feature['properties']['id'] != input_feature_id:
+                continue
+            else:
+                print(f"ID: {input_feature_id} not found.")
+                return None
+                
+    # given Feature Obj as input, retrieve parent Feature Obj, else None
+    def get_parent_feature(input_feature: object) -> None:
+
+        pass
 
 
 class Feature:
@@ -99,9 +113,6 @@ class properties:
 # How to ingest json
 # nad how to retrieve
 
-
-    # get_parent_feature(input_feature: Feature) -> Optional [Feature]
-    # given Feature Obj as input, retrieve parent Feature Obj, else None
 
     # get_children_features(input_feature: Feature) -> List[Feature]
     # given Feature obj as input, retrieve its children Feat Objs as List.

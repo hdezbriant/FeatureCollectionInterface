@@ -172,7 +172,17 @@ class FeatureCollection:
                 
 
     def get_all_facings() -> list:
-        pass
+        all_facings = []
+        for feature in features_geojson['features']:
+            if feature['properties']['type'] == "facing":
+                all_facings.append(feature)
+            elif feature['properties']['type'] != "facing":
+                continue
+            else:
+                break
+        all_facings = json.dumps(all_facings, indent = 2)
+        print(all_facings)
+        return all_facings
 
 class Feature:
     def __init__(self, geometry, ) -> None:

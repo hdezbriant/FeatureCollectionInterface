@@ -72,14 +72,25 @@ def shelf_interface(features_geojson):
             
             if type_selection == 1:
                 FeatureCollection.get_all_shelves()
-
             elif type_selection == 2:
                 FeatureCollection.get_all_facings()
+            else:
+                print("Invalid selection\n Exiting...")
+                raise SystemExit()
             
-
-        # Create compound label for facing
+        # Return formatted string label of parent Shelf label + given Facing label
+        # as {shelf_label}_{facing_label}, such as "shelf_01_N"
         elif selection == 5:
-            print("Selected 5")
+            id_select = """Please enter the Facing ID:\n"""
+            facing_id = input(id_select)
+
+            # Targets a specified facing by ID
+            facing = FeatureCollection.feature_finder(facing_id)
+            if facing:
+                FeatureCollection.get_facing_compound_label(facing)
+            elif facing == None:
+                print("Invalid ID\n Exiting...")
+                raise SystemExit()
 
         # Exit program
         elif selection == 6:
@@ -128,10 +139,10 @@ class FeatureCollection:
         if childs_parent_id:
             for feature in features_geojson['features']:
                 if feature['properties']['id'] == childs_parent_id:
-                    feature = json.dumps(feature, indent = 2)
-                    print(feature)
+                    pretty_parent = json.dumps(feature, indent = 2)
+                    print(pretty_parent)
                     print("Parent found!")
-                    break
+                    return feature
                 elif feature['properties']['id'] != childs_parent_id:
                     continue
                 else:
@@ -184,6 +195,24 @@ class FeatureCollection:
         print(all_facings)
         return all_facings
 
+    # Combines Parent Shelf Label with Facing Label and returns it.
+    # =============
+    # This will not work correctly with the current structure in Prod
+    # due to the lack of "preset" property in the sample GeoJSON provided
+    # label = "shelf_01"   VS   (preset: "pharmacy" + _ + label: "01")
+
+    def get_facing_compound_label(facing: dict) -> str:
+        # Assigning Parent shelf and facing objects
+        parent_shelf = FeatureCollection.get_parent_feature(facing)
+        shelf_label = parent_shelf['properties']['label']
+        facing_label = facing['properties']['label']
+
+        # Concatenating labels.
+        formatted_label = f"{shelf_label}_{facing_label}"
+        print(f"Shelf Label: {formatted_label}")
+        return formatted_label
+    # =============
+
 class Feature:
     def __init__(self, geometry, ) -> None:
         self.geometry = geometry
@@ -201,13 +230,6 @@ class properties:
         self.type = type
         self.parent = parent
 
-
-# How to ingest json
-# nad how to retrieve
-
-    # get_facing_compound_label(facing: Facing) -> str
-    # Return formatted string label of parent Shelf label + given Facing label
-    # as {shelf_label}_{facing_label}, such as "shelf_01_N"
 
 if __name__ == "__main__":
     # Loads geojson file for processing later

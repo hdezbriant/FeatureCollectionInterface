@@ -14,7 +14,10 @@ import sys
 # # closes window on key press
 # cv2.destroyAllWindows()
 
-def shelf_interface(geojson_file):
+def shelf_interface(features_geojson):
+
+    # features_geojson = json.dumps(features_geojson['features'], indent = 2)
+    # print(features_geojson)
 
     # Displays menu for user to select desired operation
     menu = """Select one of the following options: 
@@ -26,6 +29,7 @@ def shelf_interface(geojson_file):
     6. Quit.\nEnter your selection: """
 
     selection = int(input(menu))
+
 
     # Handles user selection to perform chosen task.
     try:
@@ -68,7 +72,10 @@ class FeatureCollection:
 
 
     def get_feature(input_feature_id: str) -> None:
-        print(feature_collection)
+        for feature in features_geojson['features']:
+            if feature['properties']['id'] == input_feature_id:
+                feature = json.dumps(feature, indent = 2)
+                print(feature)
 
 
 class Feature:
@@ -110,8 +117,7 @@ class properties:
 
 if __name__ == "__main__":
     # Loads geojson file for processing later
-    with open(sys.argv[1], "r") as feature_collection:
-        feature_collection = json.load(feature_collection)
-        feature_collection = json.dumps(feature_collection, indent = 2)
-        shelf_interface(feature_collection)
+    with open(sys.argv[1], "r") as features_geojson:
+        features_geojson = json.load(features_geojson)
+        shelf_interface(features_geojson)
     

@@ -31,13 +31,13 @@ def shelf_interface(features_geojson):
     try:
         # Get Feature by ID
         if selection == 1:
-            id_select = '''Which ID would you like to fetch?\n'''
+            id_select = """Which ID would you like to fetch?\n"""
             feature_id = input(id_select)
             FeatureCollection.get_feature(feature_id)
 
         # Get Parent of given Feature
         elif selection == 2:
-            id_select = '''Please enter the ID for the Child Feature object:\n'''
+            id_select = """Please enter the ID for the Child Feature object:\n"""
             feature_id = input(id_select)
 
             # Finds the requested object and passes into Class method, if it exists
@@ -51,7 +51,7 @@ def shelf_interface(features_geojson):
 
         # Get Children of a Feature
         elif selection == 3:
-            id_select = '''Please enter the ID for the Parent Feature object:\n'''
+            id_select = """Please enter the ID for the Parent Feature object:\n"""
             feature_id = input(id_select)
 
             # Finds the requested object and passes into Class method, if it exists
@@ -64,10 +64,18 @@ def shelf_interface(features_geojson):
 
         # Get all Shelves or Facings
         elif selection == 4:
+            type_selection = """Select one of the following:
+            1. Get all Shelves
+            2. Get all Facings
+            Enter Selection:"""
+            type_selection = int(input(type_selection))
+            
+            if type_selection == 1:
+                FeatureCollection.get_all_shelves()
 
-            FeatureCollection.get_all_shelves()
-            FeatureCollection.get_all_facings()
-            # Return ALL available Shelf or Facing objs as a List. Else None
+            elif type_selection == 2:
+                FeatureCollection.get_all_facings()
+            
 
         # Create compound label for facing
         elif selection == 5:
@@ -80,7 +88,7 @@ def shelf_interface(features_geojson):
 
     except ValueError:
         print(f"{selection} is not a valid choice. Please use the corresponding numbers to make a selection.")
-        shelf_interface()
+        raise SystemExit()
 
 
 class FeatureCollection:
@@ -147,10 +155,22 @@ class FeatureCollection:
         children_features = json.dumps(children_features, indent = 2)
         print(children_features)
         return children_features
-                
+
+    # Retrieve all Shelf objects in file
     def get_all_shelves() -> list:
-        pass
-    
+        all_shelves = []
+        for feature in features_geojson['features']:
+            if feature['properties']['type'] == "shelf":
+                all_shelves.append(feature)
+            elif feature['properties']['type'] != "shelf":
+                continue
+            else:
+                break
+        all_shelves = json.dumps(all_shelves, indent = 2)
+        print(all_shelves)
+        return all_shelves
+                
+
     def get_all_facings() -> list:
         pass
 

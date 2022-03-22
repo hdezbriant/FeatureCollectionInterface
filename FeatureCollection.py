@@ -57,10 +57,17 @@ class FeatureCollection:
     def get_children_features(self, input_feature) -> list:
         return input_feature.children
 
+
+# Combines Parent Shelf Label with Facing Label and returns it.
+    # =============
+    # This will not work correctly with the current structure in Prod
+    # due to the lack of "preset" property in the sample GeoJSON provided
+    # label = "shelf_01"   VS   (preset: "pharmacy" + _ + label: "01")
+
     def get_facing_compound_label(self, input_facing) -> str:
         compound_label = input_facing.parent.label + '_' + input_facing.label
         return compound_label
-
+    # =============
 
 class Feature:
     def __init__(self, id, label):

@@ -37,26 +37,36 @@ class FeatureCollection:
         # has a parent, iterate through your shelves, adding this Facing to the parent shelf's facings and
         # adding the parent shelf to the facing as facing.parent
 
-    def get_all_shelves(self):
-        return self.shelves
-
-    def get_all_facings(self):
-        return self.facings
-
-    def get_feature(self, input_feature_id):
+    def get_feature(self, input_feature_id) -> None:
         for feature in self.shelves:
             if feature.id == input_feature_id:
+                print(feature)
                 return feature
         for facing in self.facings:
             if facing.id == input_feature_id:
+                print(feature)
                 return facing
 
-    def get_parent_feature(self, input_feature) -> object:
+    def get_all_shelves(self) -> list:
+        for shelf in self.shelves:
+            print(shelf)
+        return self.shelves
+
+    def get_all_facings(self) -> list:
+        for facing in self.facings:
+            print(facing)
+        return self.facings
+
+    def get_parent_feature(self, input_feature) -> None:
+        print(input_feature.parent)
         return input_feature.parent
 
     def get_children_features(self, input_feature) -> list:
+        print(input_feature.children)
         return input_feature.children
 
+    def __str__(self) -> str:
+        return "%s" % (self.id)
 
 # Combines Parent Shelf Label with Facing Label and returns it.
     # =============
@@ -66,8 +76,10 @@ class FeatureCollection:
 
     def get_facing_compound_label(self, input_facing) -> str:
         compound_label = input_facing.parent.label + '_' + input_facing.label
+        print(compound_label)
         return compound_label
     # =============
+
 
 class Feature:
     def __init__(self, id, label):
@@ -83,6 +95,27 @@ class Shelf(Feature):
         self.angle = angle
         self.coordinates = coordinates
 
+    def __str__(self):
+        s = ('\n'
+            '"type": %s\n'
+            '"label": %s\n'
+            '"id": %s\n'
+            '"angle:" %s\n'
+            '"coordinates": %s\n'
+            '"parent": %s\n'
+            '"children": %s\n')
+
+        props = (
+            self.__class__.__name__,
+            self.label,
+            self.id,
+            self.angle,
+            self.coordinates,
+            self.parent,
+            self.children)
+
+        return s % props
+
     def draw():
         pass
 
@@ -92,6 +125,26 @@ class Facing(Feature):
         super().__init__(id, label)
         self.startpoint = startpoint
         self.endpoint = endpoint
+
+    def __str__(self):
+        s = ('\n'
+            '"type": %s\n'
+            '"label": %s\n'
+            '"id": %s\n'
+            '"coordinates:" [%s %s]\n'
+            '"parent": %s\n'
+            '"children": %s\n')
+
+        props = (
+            self.__class__.__name__,
+            self.label,
+            self.id,
+            self.parent.id,
+            self.children,
+            self.startpoint,
+            self.endpoint)
+
+        return s % props
 
     def draw():
         pass

@@ -5,8 +5,7 @@ import math
 import numpy as np
 from FeatureCollection import FeatureCollection
 
-def shelf_interface(features_geojson):
-
+def shelf_interface(geojson):
     # Displays menu for user to select desired operation
     menu = """Select one of the following options: 
     1. Retrieve Feature object by ID(if it exists).
@@ -24,34 +23,23 @@ def shelf_interface(features_geojson):
         if selection == 1:
             id_select = """Which ID would you like to fetch?\n"""
             feature_id = input(id_select)
-            FeatureCollection.get_feature(feature_id)
+            print(fc.get_feature(feature_id))
 
         # Get Parent of given Feature
         elif selection == 2:
             id_select = """Please enter the ID for the Child Feature object:\n"""
             feature_id = input(id_select)
-
-            # Finds the requested object and passes into Class method, if it exists
-            child = FeatureCollection.feature_finder(feature_id)
-            if child == None:
-                print("Child not found.")
-                return None
-            elif child:
-                FeatureCollection.get_parent_feature(child)
-            
+            # Finds the requested object and passes into Class method
+            input_feature = fc.get_feature(feature_id)
+            fc.get_parent_feature(input_feature)   
 
         # Get Children of a Feature
         elif selection == 3:
             id_select = """Please enter the ID for the Parent Feature object:\n"""
             feature_id = input(id_select)
-
-            # Finds the requested object and passes into Class method, if it exists
-            parent_feature = FeatureCollection.feature_finder(feature_id)
-            if parent_feature == None:
-                print("Parent Object does not exist.")
-                return None
-            elif parent_feature:
-                FeatureCollection.get_children_features(parent_feature)
+            # Finds the requested object and passes into Class method
+            parent_feature = fc.get_feature(feature_id)
+            fc.get_children_features(parent_feature)
 
         # Get all Shelves or Facings
         elif selection == 4:
@@ -62,9 +50,9 @@ def shelf_interface(features_geojson):
             type_selection = int(input(type_selection))
             
             if type_selection == 1:
-                FeatureCollection.get_all_shelves()
+                fc.get_all_shelves()
             elif type_selection == 2:
-                FeatureCollection.get_all_facings()
+                fc.get_all_facings()
             else:
                 print("Invalid selection\n Exiting...")
                 raise SystemExit()
@@ -74,12 +62,11 @@ def shelf_interface(features_geojson):
         elif selection == 5:
             id_select = """Please enter the Facing ID:\n"""
             facing_id = input(id_select)
-
-            # Targets a specified facing by ID
-            facing = FeatureCollection.feature_finder(facing_id)
-            if facing:
-                FeatureCollection.get_facing_compound_label(facing)
-            elif facing == None:
+            # Finds a given feature by ID and checks if it is a facing
+            facing = fc.get_feature(facing_id)
+            if facing.parent:
+                fc.get_facing_compound_label(facing)
+            elif facing.parent == None:
                 print("Invalid ID\n Exiting...")
                 raise SystemExit()
 
@@ -94,7 +81,9 @@ def shelf_interface(features_geojson):
 
 if __name__ == "__main__":
     # Loads geojson file for processing later
-    with open(sys.argv[1], "r") as features_geojson:
-        features_geojson = json.load(features_geojson)
-        shelf_interface(features_geojson)
+    fc = None
+    with open(sys.argv[1], "r") as geojson:
+        geojson = json.load(geojson)
+        fc = FeatureCollection(geojson)
+    shelf_interface(fc)
     

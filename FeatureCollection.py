@@ -1,11 +1,10 @@
 class FeatureCollection:
     def __init__(self, geojson):
+        # setting up lists to contain instances of the classes
         self.shelves = []
         self.facings = []
 
-        # Two passes
-        # First pass, you can see which feature is of type Shelf, and create Shelf objects, storing
-        # them in self.shelves
+        # iterating through geojson file and populating the shelves list
         for feature in geojson['features']:
             if feature['properties']['type'] == "shelf":
                 id = feature['properties']['id']
@@ -15,8 +14,7 @@ class FeatureCollection:
 
                 self.shelves.append(Shelf(id, label, angle, coordinates))
 
-        # Second pass, you can see which ones are type Facing, and create Facing objects, storing
-        # them in self.facings.
+        # Second pass, instantiating Facing object and populating facing list
         for feature in geojson['features']:
             if feature['properties']['type'] == "facing":
                 id = feature['properties']['id']
@@ -29,14 +27,14 @@ class FeatureCollection:
                 facing = Facing(id, label, coordinates, startpoint, endpoint)
                 self.facings.append(facing)
 
+                # Matching shelf parents and their facing children
                 for shelf in self.shelves:
                     if parent == shelf.id:
                         shelf.children.append(facing)
                         facing.parent = shelf
-        # Then, if the specific Facing object
-        # has a parent, iterate through your shelves, adding this Facing to the parent shelf's facings and
-        # adding the parent shelf to the facing as facing.parent
 
+
+    # method to retrieve a feature given the feature ID 
     def get_feature(self, input_feature_id) -> None:
         for feature in self.shelves:
             if feature.id == input_feature_id:
@@ -47,28 +45,28 @@ class FeatureCollection:
                 print(feature)
                 return facing
 
+    # retrieve all shelves in collection
     def get_all_shelves(self) -> list:
         for shelf in self.shelves:
             print(shelf)
         return self.shelves
 
+    # retrieve fall facings in collection 
     def get_all_facings(self) -> list:
         for facing in self.facings:
             print(facing)
         return self.facings
 
+    # returns parent shelf feature of the given facing feature
     def get_parent_feature(self, input_feature) -> None:
         print(input_feature.parent)
         return input_feature.parent
 
+    # returns children facings of the given parent shelf
     def get_children_features(self, input_feature) -> list:
         for child in input_feature.children:
             print(child)
-        # print(children_list)
         return input_feature.children
-
-    # def __str__(self) -> str:
-    #     return "%s" % (self.id)
 
 # Combines Parent Shelf Label with Facing Label and returns it.
     # =============
@@ -82,7 +80,7 @@ class FeatureCollection:
         return compound_label
     # =============
 
-
+# sets up class which will provide some properties to subclasses
 class Feature:
     def __init__(self, id, label):
         self.id = id
@@ -90,7 +88,7 @@ class Feature:
         self.parent = None
         self.children = []
 
-
+# Subclass for features with type Shelf
 class Shelf(Feature):
     def __init__(self, id, label, angle, coordinates):
         super().__init__(id, label)
@@ -122,6 +120,7 @@ class Shelf(Feature):
         pass
 
 
+# subclass for features with type Facing
 class Facing(Feature):
     def __init__(self, id, label, coordinates, startpoint, endpoint):
         super().__init__(id, label)

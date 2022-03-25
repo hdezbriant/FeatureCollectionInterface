@@ -26,7 +26,7 @@ class FeatureCollection:
                 endpoint = tuple(coordinates[1])
                 parent = feature['properties']['parent']
 
-                facing = Facing(id, label, startpoint, endpoint)
+                facing = Facing(id, label, coordinates, startpoint, endpoint)
                 self.facings.append(facing)
 
                 for shelf in self.shelves:
@@ -62,11 +62,13 @@ class FeatureCollection:
         return input_feature.parent
 
     def get_children_features(self, input_feature) -> list:
-        print(input_feature.children)
+        for child in input_feature.children:
+            print(child)
+        # print(children_list)
         return input_feature.children
 
-    def __str__(self) -> str:
-        return "%s" % (self.id)
+    # def __str__(self) -> str:
+    #     return "%s" % (self.id)
 
 # Combines Parent Shelf Label with Facing Label and returns it.
     # =============
@@ -121,8 +123,9 @@ class Shelf(Feature):
 
 
 class Facing(Feature):
-    def __init__(self, id, label, startpoint, endpoint):
+    def __init__(self, id, label, coordinates, startpoint, endpoint):
         super().__init__(id, label)
+        self.coordinates = coordinates
         self.startpoint = startpoint
         self.endpoint = endpoint
 
@@ -131,7 +134,7 @@ class Facing(Feature):
             '"type": %s\n'
             '"label": %s\n'
             '"id": %s\n'
-            '"coordinates:" [%s %s]\n'
+            '"coordinates": %s\n'
             '"parent": %s\n'
             '"children": %s\n')
 
@@ -139,10 +142,9 @@ class Facing(Feature):
             self.__class__.__name__,
             self.label,
             self.id,
+            self.coordinates,
             self.parent.id,
-            self.children,
-            self.startpoint,
-            self.endpoint)
+            self.children)
 
         return s % props
 

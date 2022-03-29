@@ -15,19 +15,9 @@ Simply run
 `python3 ShelfInterface.py {your_geoJSON_file}.json`  
 To open up the CLI menu.  
 
-![example of the CLI interface menu](./images/sampleCLI.png "jiofje")
+![example of the CLI interface menu](./images/sampleCLI.png)
 
 Use the numbered menu options to select an operation.  
 Then, if prompted, provide the requested data to fetch the corresponding data.  
 Be sure to verify the structure of the data in the provided `geojson_sample.json` before doing so.  
 The process will fail to run if the format is incorrect, and you will see an error in python in this case.  
-
-An example series of commands for accessing the provided sample geojson file and retrieving a Feature Object by its ID looks like this:  
-- Opening the CLI and providing the sample file
-`python3 ShelfInterface.py geojson_sample.json`
-
-- Selecting the option to retrieve an object by ID
-`1`
-
-- Retrieving the Feature object with ID of '02'
-`02`

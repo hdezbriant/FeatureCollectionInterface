@@ -1,7 +1,5 @@
 import json
-import cv2 as cv
 import sys
-import math
 import numpy as np
 from FeatureCollection import FeatureCollection, Shelf, Facing
 
@@ -25,7 +23,7 @@ def shelf_interface(geojson):
         if selection == "1":
             id_select = """Which ID would you like to fetch(Case-Sensitive)?\n"""
             feature_id = input(id_select)
-            print(fc.get_feature(feature_id))
+            fc.get_feature(feature_id)
 
         # Get Parent of given Feature
         elif selection == "2":
@@ -70,20 +68,17 @@ def shelf_interface(geojson):
                 print("Invalid ID\n Exiting...")
                 raise SystemExit()
 
+        # Draw Shelves/Facings in window with OpenCV
         elif selection == "6":
             feature_type = input("""\n1. Draw all shelves.
-            2. Draw all facings.
-            3. Draw everything.\n""")
+            2. Draw all facings\n""")
             if feature_type == "1":
-                fc.draw_shelves()               
+                Shelf.draw(fc)               
             elif feature_type == "2":
-                fc.draw_facings()
-            elif feature_type == "3":
-                all_features = fc.shelves.append(fc.facings)
-                fc.draw_all(all_features)
+                Facing.draw(fc)
 
         # Exit program
-        elif selection == "9":
+        elif selection == "7":
             print("Exiting...")
             raise SystemExit()
 

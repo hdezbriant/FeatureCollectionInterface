@@ -1,6 +1,6 @@
 # FeatureCollection Interface
 
-This is a CLI app used to demonstrate an interface with a geoJSON object utilzing class structure and object inheritance in python.
+This is a CLI app used to demonstrate an interface with a geoJSON object utilizing class structure and object inheritance in python.
 Included is a sample geoJSON file containing the structure that this app will process.
 
 ## Requirements
